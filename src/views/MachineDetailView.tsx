@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -15,6 +15,7 @@ import {
   Weight,
   ChevronLeft,
   ChevronRight,
+  X,
 } from "lucide-react";
 import type { MachineDetail } from "@/data/machines";
 import type { FinnAdDetail } from "@/lib/finn-api";
@@ -45,6 +46,7 @@ export function MachineDetailView({
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const thumbnailContainerRef = useRef<HTMLDivElement>(null);
 
   const goToPrevious = () => {
@@ -78,6 +80,37 @@ export function MachineDetailView({
     setIsDragging(false);
   };
 
+  const openLightbox = (index: number) => {
+    setCurrentImageIndex(index);
+    setIsLightboxOpen(true);
+  };
+
+  const closeLightbox = () => {
+    setIsLightboxOpen(false);
+  };
+
+  const goToPreviousLightbox = () => {
+    setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  const goToNextLightbox = () => {
+    setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+
+  // Keyboard navigation for lightbox
+  useEffect(() => {
+    if (!isLightboxOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowLeft") goToPreviousLightbox();
+      if (e.key === "ArrowRight") goToNextLightbox();
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isLightboxOpen, images.length]);
+
   return (
     <main className="min-h-screen w-full overflow-x-hidden bg-white mt-24 text-gray-900">
       <section className="relative bg-white pb-8 pt-16 sm:pb-12 sm:pt-20 lg:pb-16 lg:pt-28">
@@ -99,7 +132,10 @@ export function MachineDetailView({
             <div className="w-full space-y-3">
               <Reveal animation="scale-in">
                 {/* Main Image Container */}
-                <div className="relative h-[45vh] min-h-[280px] w-full overflow-hidden rounded-lg bg-gray-100 shadow-lg sm:h-[50vh] sm:min-h-[320px] sm:rounded-xl lg:h-[65vh] lg:min-h-[450px] lg:max-h-[600px] lg:rounded-2xl">
+                <div
+                  className="relative h-[45vh] min-h-[280px] w-full overflow-hidden rounded-lg bg-gray-100 shadow-lg sm:h-[50vh] sm:min-h-[320px] sm:rounded-xl lg:h-[65vh] lg:min-h-[450px] lg:max-h-[600px] lg:rounded-2xl cursor-pointer"
+                  onClick={() => openLightbox(currentImageIndex)}
+                >
                   <img
                     src={images[currentImageIndex]}
                     alt={`${machine.title} - Bilde ${currentImageIndex + 1}`}
@@ -152,7 +188,7 @@ export function MachineDetailView({
                   {images.map((image, index) => (
                     <button
                       key={index}
-                      onClick={() => setCurrentImageIndex(index)}
+                      onClick={() => openLightbox(index)}
                       className={`relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-md border-2 transition-all sm:h-16 sm:w-16 sm:rounded-lg lg:h-20 lg:w-20 ${
                         index === currentImageIndex
                           ? "scale-105 border-[hsl(var(--primary))] shadow-md"
@@ -393,6 +429,83 @@ export function MachineDetailView({
           </Reveal>
         </div>
       </section>
+
+      {/* Lightbox */}
+      {isLightboxOpen && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/95 backdrop-blur-sm">
+          {/* Close Button */}
+          <button
+            onClick={closeLightbox}
+            className="absolute right-4 top-4 z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-all hover:bg-white/20 hover:scale-110"
+            aria-label="Lukk"
+          >
+            <X className="h-6 w-6" />
+          </button>
+
+          {/* Image Counter */}
+          <div className="absolute left-1/2 top-4 z-10 -translate-x-1/2 rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-white backdrop-blur-sm">
+            {currentImageIndex + 1} / {images.length}
+          </div>
+
+          {/* Previous Button */}
+          {images.length > 1 && (
+            <button
+              onClick={goToPreviousLightbox}
+              className="absolute left-4 top-1/2 z-10 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-all hover:bg-white/20 hover:scale-110"
+              aria-label="Forrige bilde"
+            >
+              <ChevronLeft className="h-8 w-8" />
+            </button>
+          )}
+
+          {/* Next Button */}
+          {images.length > 1 && (
+            <button
+              onClick={goToNextLightbox}
+              className="absolute right-4 top-1/2 z-10 flex h-14 w-14 -translate-y-1/2 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-all hover:bg-white/20 hover:scale-110"
+              aria-label="Neste bilde"
+            >
+              <ChevronRight className="h-8 w-8" />
+            </button>
+          )}
+
+          {/* Main Lightbox Image */}
+          <div
+            className="relative h-[90vh] w-[90vw] cursor-pointer"
+            onClick={closeLightbox}
+          >
+            <img
+              src={images[currentImageIndex]}
+              alt={`${machine.title} - Bilde ${currentImageIndex + 1}`}
+              className="h-full w-full object-contain"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+
+          {/* Thumbnail Strip */}
+          {images.length > 1 && (
+            <div className="absolute bottom-4 left-1/2 z-10 flex max-w-[90vw] -translate-x-1/2 gap-2 overflow-x-auto rounded-lg bg-white/10 p-2 backdrop-blur-sm">
+              {images.map((image, index) => (
+                <button
+                  key={index}
+                  onClick={() => setCurrentImageIndex(index)}
+                  className={`relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-md border-2 transition-all ${
+                    index === currentImageIndex
+                      ? "border-white scale-110 shadow-lg"
+                      : "border-white/30 opacity-60 hover:opacity-100"
+                  }`}
+                >
+                  <img
+                    src={image}
+                    alt={`Thumbnail ${index + 1}`}
+                    className="h-full w-full object-cover"
+                  />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
     </main>
   );
 }
