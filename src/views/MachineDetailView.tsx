@@ -112,7 +112,7 @@ export function MachineDetailView({
   }, [isLightboxOpen, images.length]);
 
   return (
-    <main className="min-h-screen w-full overflow-x-hidden bg-white mt-24 text-gray-900">
+    <main className="min-h-screen w-full overflow-x-hidden bg-white pt-20 text-gray-900">
       <section className="relative bg-white pb-8 pt-16 sm:pb-12 sm:pt-20 lg:pb-16 lg:pt-28">
         <div className="mx-auto w-full max-w-7xl px-3 sm:px-4 lg:px-6">
           {/* Back Link */}
