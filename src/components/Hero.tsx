@@ -6,12 +6,9 @@ import { useEffect, useState } from "react";
 import { ArrowRight, PhoneCall } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Reveal, SplitText } from "@/components/animated";
-import { PlaceholderGraphic } from "@/components/media";
 import { usePrefersReducedMotion } from "@/hooks/use-prefers-reduced-motion";
 import { useTranslations } from "@/hooks/use-translations";
 import { cn } from "@/lib/utils";
-
-type SlideStatus = "loading" | "loaded" | "error";
 
 const SLIDES = [
   {
@@ -34,42 +31,7 @@ const Hero = () => {
   const t = useTranslations();
   const prefersReducedMotion = usePrefersReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
-  const [statuses, setStatuses] = useState<SlideStatus[]>(
-    () => SLIDES.map(() => "loading" as SlideStatus)
-  );
   const [isPaused, setIsPaused] = useState(false);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-
-    SLIDES.forEach((slide, index) => {
-      if (!slide.src) {
-        setStatuses((prev) => {
-          const next = [...prev];
-          next[index] = "error";
-          return next;
-        });
-        return;
-      }
-
-      const img = new window.Image();
-      img.src = slide.src;
-      img.onload = () => {
-        setStatuses((prev) => {
-          const next = [...prev];
-          next[index] = "loaded";
-          return next;
-        });
-      };
-      img.onerror = () => {
-        setStatuses((prev) => {
-          const next = [...prev];
-          next[index] = "error";
-          return next;
-        });
-      };
-    });
-  }, []);
 
   useEffect(() => {
     if (prefersReducedMotion) return;
@@ -91,35 +53,28 @@ const Hero = () => {
       onMouseLeave={() => setIsPaused(false)}
     >
       <div className="absolute inset-0">
-        {SLIDES.map((slide, index) => {
-          const status = statuses[index];
-          return (
-            <div
-              key={slide.src ?? index}
-              className={cn(
-                "absolute inset-0 h-full w-full overflow-hidden transition-opacity duration-1200ms ease-soft",
-                activeIndex === index ? "opacity-100" : "opacity-0"
-              )}
-              aria-hidden={activeIndex !== index}
-            >
-              {status === "loaded" ? (
-                <div className="relative h-full w-full">
-                  <NextImage
-                    src={slide.src ?? ""}
-                    alt={slide.label}
-                    fill
-                    className="object-cover"
-                    priority={index === 0}
-                    sizes="100vw"
-                  />
-                </div>
-              ) : (
-                <PlaceholderGraphic label={slide.label} className="h-full w-full" />
-              )}
-              <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/50" />
+        {SLIDES.map((slide, index) => (
+          <div
+            key={slide.src ?? index}
+            className={cn(
+              "absolute inset-0 h-full w-full overflow-hidden transition-opacity duration-1200ms ease-soft",
+              activeIndex === index ? "opacity-100" : "opacity-0"
+            )}
+            aria-hidden={activeIndex !== index}
+          >
+            <div className="relative h-full w-full">
+              <NextImage
+                src={slide.src}
+                alt={slide.label}
+                fill
+                className="object-cover"
+                priority={index === 0}
+                sizes="100vw"
+              />
             </div>
-          );
-        })}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/40 to-black/50" />
+          </div>
+        ))}
       </div>
 
       <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col items-center justify-center gap-10 px-6 text-center">

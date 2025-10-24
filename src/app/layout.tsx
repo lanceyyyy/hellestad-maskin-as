@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Outfit } from "next/font/google";
 import "./globals.css";
 import { Providers } from "@/app/providers";
 
@@ -8,6 +8,13 @@ const inter = Inter({
   display: "swap",
   variable: "--font-inter",
   weight: ["300", "400", "500", "600", "700"],
+});
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-outfit",
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 const siteUrl = "https://www.hellestadmaskin.no";
@@ -70,7 +77,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="no" className={`${inter.variable} light`} suppressHydrationWarning>
+    <html lang="no" className={`${inter.variable} ${outfit.variable} light`} suppressHydrationWarning>
       <body className="font-sans">
         <Providers>{children}</Providers>
       </body>

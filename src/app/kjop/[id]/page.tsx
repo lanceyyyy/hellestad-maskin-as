@@ -13,15 +13,17 @@ export const dynamicParams = true;
 export async function generateStaticParams() {
   try {
     const ids = await fetchAllAdIds();
-    console.log("Generated static params for IDs:", ids);
     return ids.map((id) => ({ id }));
   } catch (error) {
-    console.error("Error in generateStaticParams:", error);
     return [];
   }
 }
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+export async function generateMetadata({
+  params,
+}: {
+  params: { id: string };
+}): Promise<Metadata> {
   try {
     const finnAd = await fetchAdDetail(params.id);
 
@@ -43,26 +45,22 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
   }
 }
 
-export default async function MachineDetailPage({ params }: { params: { id: string } }) {
-  console.log("=== Machine Detail Page ===");
-  console.log("Requested ID:", params.id);
-
+export default async function MachineDetailPage({
+  params,
+}: {
+  params: { id: string };
+}) {
   try {
     // Fetch ad details from FINN.no API
     const finnAd = await fetchAdDetail(params.id);
 
-    console.log("FINN Ad result:", finnAd ? "Found" : "Not found");
-
     if (!finnAd) {
-      console.log("Ad not found, calling notFound()");
       notFound();
     }
 
-    console.log("Mapping FINN ad to machine format...");
     // Map FINN.no data to MachineDetail format
     const machine = mapFinnAdToMachine(finnAd);
 
-    console.log("Rendering MachineDetailView...");
     return <MachineDetailView machine={machine} finnData={finnAd} />;
   } catch (error) {
     console.error("Error in MachineDetailPage:", error);

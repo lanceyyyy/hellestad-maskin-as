@@ -11,8 +11,6 @@ export function Header() {
     if (!pathname) return false;
     return (
       pathname.startsWith("/kjop/") ||
-      pathname === "/kontakt" ||
-      pathname === "/selg" ||
       pathname === "/personvern"
     );
   }, [pathname]);

@@ -10,9 +10,8 @@ const CTABanner = () => {
   const t = useTranslations();
 
   return (
-    <section className="relative overflow-hidden bg-[linear-gradient(135deg,hsl(var(--secondary))_0%,hsl(220_25%_25%)_100%)] py-24">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,hsl(var(--primary)/0.15),transparent_50%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_bottom_left,hsl(var(--primary)/0.1),transparent_40%)]" />
+    <section className="relative overflow-hidden bg-gradient-to-br from-[hsl(var(--primary))] to-[hsl(27,85%,45%)] py-24">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(255,255,255,0.1),transparent_50%)]" />
 
       <div className="relative mx-auto flex max-w-6xl flex-col items-center gap-10 px-6 text-center">
         <Reveal animation="fade-up">
@@ -46,9 +45,7 @@ const CTABanner = () => {
               size="lg"
               className="rounded-full border-2 border-white/60 bg-white/10 px-10 py-6 text-base font-semibold tracking-wide text-white backdrop-blur-sm transition-all hover:border-white hover:bg-white/20"
             >
-              <Link href="/kjop">
-                {t.hero.viewMachines}
-              </Link>
+              <Link href="/kjop">{t.hero.viewMachines}</Link>
             </Button>
           </div>
         </Reveal>

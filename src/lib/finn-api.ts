@@ -133,23 +133,9 @@ function parseSearchFeed(xmlText: string): FinnCard[] {
   let entries = feed.entry || feed["atom:entry"] || [];
   if (!Array.isArray(entries)) entries = [entries].filter(Boolean);
 
-  // Log raw entry structure for debugging (first entry only)
-  if (entries.length > 0) {
-    console.log("=== FINN.no Search Feed Entry Structure ===");
-    console.log(JSON.stringify(entries[0], null, 2));
-    console.log("===========================================");
-  }
-
   const cards = entries
     .map(extractCoreFromFeedEntry)
     .filter((card: FinnCard | null): card is FinnCard => card !== null);
-
-  // Log parsed cards
-  console.log(`=== Parsed ${cards.length} FINN.no Cards ===`);
-  if (cards.length > 0) {
-    console.log("Sample card:", JSON.stringify(cards[0], null, 2));
-  }
-  console.log("===========================================");
 
   return cards;
 }
@@ -163,10 +149,8 @@ function collectImages(entry: any): string[] {
     if (Array.isArray(mediaContent)) {
       const mediaImages = mediaContent.map((m: any) => m["@_url"]).filter(Boolean);
       images.push(...mediaImages);
-      console.log(`📸 Found ${mediaImages.length} images from media:content (array)`);
     } else if (mediaContent["@_url"]) {
       images.push(mediaContent["@_url"]);
-      console.log(`📸 Found 1 image from media:content: ${mediaContent["@_url"].substring(0, 60)}...`);
     }
   }
 
@@ -175,14 +159,10 @@ function collectImages(entry: any): string[] {
   const linkImages = links
     .filter((l) => l.rel === "enclosure" || l.rel === "image")
     .map((l) => l.href);
-  if (linkImages.length > 0) {
-    console.log(`📸 Found ${linkImages.length} images from links`);
-  }
   images.push(...linkImages);
 
   // Remove duplicates
   const uniqueImages = Array.from(new Set(images));
-  console.log(`📸 Total unique images: ${uniqueImages.length}`);
   return uniqueImages;
 }
 
@@ -246,21 +226,11 @@ function parseAdEntry(xmlText: string): FinnAdDetail | null {
   const doc = xmlParser.parse(xmlText);
   const entry = doc["atom:entry"] || doc.entry || (doc.feed && doc.feed.entry) || {};
 
-  // Log raw entry structure for debugging
-  console.log("=== FINN.no Ad Detail Entry Structure ===");
-  console.log(JSON.stringify(entry, null, 2));
-  console.log("=========================================");
-
   const title = entry["atom:title"] || entry.title || null;
   if (!title) return null;
 
   const images = collectImages(entry);
   const attrs = collectAttributes(entry);
-
-  // Log collected attributes
-  console.log("=== Collected Attributes ===");
-  console.log(JSON.stringify(attrs, null, 2));
-  console.log("============================");
 
   // Extract ID from entry
   const idStr = entry["atom:id"] || entry.id;
@@ -305,10 +275,6 @@ function parseAdEntry(xmlText: string): FinnAdDetail | null {
     attributes: attrs,
   };
 
-  console.log("=== Parsed Ad Detail ===");
-  console.log(JSON.stringify(result, null, 2));
-  console.log("========================");
-
   return result;
 }
 
@@ -320,9 +286,6 @@ function parseAdEntry(xmlText: string): FinnAdDetail | null {
  */
 export async function fetchMachineryCards(): Promise<FinnCard[]> {
   try {
-    console.log("=== Fetching FINN.no Machinery Cards ===");
-    console.log(`URL: ${MARKET_URL}?orgId=${ORG_ID}&rows=1000&page=1`);
-
     const xmlText = await httpGet(MARKET_URL, {
       orgId: ORG_ID,
       rows: 1000,
@@ -330,10 +293,6 @@ export async function fetchMachineryCards(): Promise<FinnCard[]> {
     });
 
     const cards = parseSearchFeed(xmlText);
-
-    console.log(`✅ Successfully fetched ${cards.length} machinery cards`);
-    console.log("========================================");
-
     return cards;
   } catch (error) {
     console.error("❌ Error fetching machinery cards:", error);
@@ -347,32 +306,11 @@ export async function fetchMachineryCards(): Promise<FinnCard[]> {
  */
 export async function fetchAdDetail(adId: string): Promise<FinnAdDetail | null> {
   try {
-    console.log(`=== Fetching FINN.no Ad Detail: ${adId} ===`);
-    console.log(`URL: ${API_ROOT}/ad/${adId}`);
-
     const xmlText = await httpGet(`${API_ROOT}/ad/${adId}`, {});
-
-    console.log(`📦 Received XML response (length: ${xmlText.length})`);
-
     const ad = parseAdEntry(xmlText);
-
-    if (ad) {
-      console.log(`✅ Successfully fetched ad detail for: ${ad.title}`);
-      console.log(`   - ID: ${ad.id}`);
-      console.log(`   - Images: ${ad.images.length}`);
-    } else {
-      console.log(`⚠️ No ad data parsed for ID: ${adId}`);
-      console.log(`📄 XML preview: ${xmlText.substring(0, 200)}...`);
-    }
-    console.log("========================================");
-
     return ad;
   } catch (error) {
     console.error(`❌ Error fetching ad ${adId}:`, error);
-    if (error instanceof Error) {
-      console.error(`   Message: ${error.message}`);
-      console.error(`   Stack: ${error.stack}`);
-    }
     return null;
   }
 }

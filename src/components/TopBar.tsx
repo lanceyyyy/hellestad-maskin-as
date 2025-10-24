@@ -27,9 +27,9 @@ export function TopBar({ isSolid = false }: TopBarProps) {
   return (
     <div
       className={cn(
-        "transition-colors duration-500 backdrop-blur-sm",
+        "hidden transition-colors duration-500 md:block",
         isSolid
-          ? "bg-gray-50 text-gray-700"
+          ? "bg-gray-50 text-gray-700 backdrop-blur-sm"
           : "bg-transparent text-white/90"
       )}
     >

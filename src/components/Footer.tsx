@@ -1,7 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { Facebook, Linkedin, Mail, MapPin, Phone, Settings } from "lucide-react";
+import {
+  Facebook,
+  Linkedin,
+  Mail,
+  MapPin,
+  Phone,
+  Settings,
+} from "lucide-react";
 import { Reveal } from "@/components/animated";
 import { useTranslations } from "@/hooks/use-translations";
 import { cn } from "@/lib/utils";
@@ -34,7 +41,6 @@ export default function Footer() {
         <div className="grid gap-12 lg:grid-cols-[1.3fr,0.9fr,1fr]">
           <Reveal animation="fade-up" className="space-y-6">
             <div className="space-y-3">
-              <Logo size="sm" variant="light" />
               <h3 className="text-2xl font-bold tracking-tight lg:text-3xl">
                 {t.footer.companyName}
               </h3>
@@ -130,7 +136,7 @@ export default function Footer() {
                       target="_blank"
                       rel="noopener noreferrer"
                       className={cn(
-                        "group inline-flex items-center gap-3 text-base font-semibold tracking-tight transition-all duration-300 hover:text-[hsl(var(--primary))]",
+                        "group inline-flex items-center gap-3 text-base font-semibold tracking-tight transition-all duration-300 hover:text-[hsl(var(--primary))]"
                       )}
                     >
                       <span className="h-[2px] w-6 bg-[hsl(var(--primary))] transition-all duration-300 group-hover:w-10" />
@@ -140,7 +146,7 @@ export default function Footer() {
                     <Link
                       href={item.path}
                       className={cn(
-                        "group inline-flex items-center gap-3 text-base font-semibold tracking-tight transition-all duration-300 hover:text-[hsl(var(--primary))]",
+                        "group inline-flex items-center gap-3 text-base font-semibold tracking-tight transition-all duration-300 hover:text-[hsl(var(--primary))]"
                       )}
                     >
                       <span className="h-[2px] w-6 bg-[hsl(var(--primary))] transition-all duration-300 group-hover:w-10" />

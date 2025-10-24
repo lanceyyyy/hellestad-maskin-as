@@ -32,15 +32,15 @@ export default function KjopView({ machines }: KjopViewProps) {
           <div className="text-center">
             <Reveal animation="fade-up">
               <h2 className="text-balance text-4xl font-bold tracking-tight text-gray-900 sm:text-5xl">
-                Tilgjengelige maskiner
+                {t.kjop.machinesSection.title}
               </h2>
             </Reveal>
 
             <Reveal animation="fade-up" delay={120}>
               <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-600">
                 {machines.length > 0
-                  ? `Vi har ${machines.length} maskiner tilgjengelig. Klikk på en maskin for mer informasjon.`
-                  : "Bla gjennom vårt utvalg av anleggsmaskiner. Kontakt oss for mer informasjon eller for å bestille visning."}
+                  ? t.kjop.machinesSection.subtitleWithCount.replace('{count}', machines.length.toString())
+                  : t.kjop.machinesSection.subtitleEmpty}
               </p>
             </Reveal>
           </div>
@@ -74,7 +74,7 @@ export default function KjopView({ machines }: KjopViewProps) {
                             variant="ghost"
                             className="group/btn inline-flex items-center gap-2 px-0 text-sm font-semibold text-[hsl(var(--primary))] hover:bg-transparent"
                           >
-                            Se detaljer
+                            {t.kjop.machinesSection.viewDetails}
                             <ExternalLink className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
                           </Button>
                         </div>
@@ -91,13 +91,13 @@ export default function KjopView({ machines }: KjopViewProps) {
                   <Package className="h-12 w-12 text-gray-400" />
                 </div>
                 <h3 className="mb-3 text-2xl font-semibold text-gray-900">
-                  Ingen maskiner for øyeblikket
+                  {t.kjop.machinesSection.emptyState.title}
                 </h3>
                 <p className="mb-8 max-w-xl text-lg text-gray-600">
-                  Vi har ingen maskiner tilgjengelig akkurat nå. Ta kontakt for å høre om kommende maskiner.
+                  {t.kjop.machinesSection.emptyState.description}
                 </p>
                 <Button asChild size="lg" className="rounded-full px-8">
-                  <Link href="/kontakt">Kontakt oss</Link>
+                  <Link href="/kontakt">{t.kjop.machinesSection.emptyState.contactButton}</Link>
                 </Button>
               </div>
             </Reveal>

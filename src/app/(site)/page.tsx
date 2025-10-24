@@ -10,7 +10,6 @@ export default function HomePage() {
       <Hero />
       <About />
       <Services />
-      <Equipment />
       <CTABanner />
     </main>
   );

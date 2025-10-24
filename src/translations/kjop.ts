@@ -36,6 +36,17 @@
         "Finner du ikke det du leter etter? Vi hjelper deg gjerne med spesifikke foresp\u00F8rsler.",
       contactButton: "Kontakt oss direkte",
     },
+    machinesSection: {
+      title: "Tilgjengelige maskiner",
+      subtitleWithCount: "Vi har {count} maskiner tilgjengelig. Klikk på en maskin for mer informasjon.",
+      subtitleEmpty: "Bla gjennom vårt utvalg av anleggsmaskiner. Kontakt oss for mer informasjon eller for å bestille visning.",
+      viewDetails: "Se detaljer",
+      emptyState: {
+        title: "Ingen maskiner for øyeblikket",
+        description: "Vi har ingen maskiner tilgjengelig akkurat nå. Ta kontakt for å høre om kommende maskiner.",
+        contactButton: "Kontakt oss",
+      },
+    },
   },
   en: {
     banner: {
@@ -72,6 +83,17 @@
       visitPlatform: "Visit Platform",
       bottomText: "Can't find what you're looking for? We're happy to help with specific inquiries.",
       contactButton: "Contact Us Directly",
+    },
+    machinesSection: {
+      title: "Available Machines",
+      subtitleWithCount: "We have {count} machines available. Click on a machine for more information.",
+      subtitleEmpty: "Browse our selection of construction machinery. Contact us for more information or to schedule a viewing.",
+      viewDetails: "View details",
+      emptyState: {
+        title: "No machines at the moment",
+        description: "We don't have any machines available right now. Contact us to hear about upcoming machinery.",
+        contactButton: "Contact us",
+      },
     },
   },
 };

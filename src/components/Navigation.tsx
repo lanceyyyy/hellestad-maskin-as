@@ -5,7 +5,7 @@ import { Menu, X, Phone, Mail } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useTranslations } from "@/hooks/use-translations";
-import { Logo } from "@/components/Logo";
+import LanguageSwitch from "@/components/LanguageSwitch";
 
 type NavigationProps = {
   activePath: string;
@@ -57,18 +57,12 @@ export function Navigation({
       <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-6">
         <Link
           href="/"
-          className="flex items-center gap-3 text-lg font-bold tracking-tight"
+          className="flex items-center text-lg font-bold tracking-tight"
           onClick={onNavigate}
           aria-label={t.navigation.companyName}
         >
-          <Logo
-            size="sm"
-            className={cn(isSolid ? "" : "drop-shadow-[0_4px_12px_rgba(0,0,0,0.3)]")}
-            variant={isSolid ? "dark" : "light"}
-          />
           <span
             className={cn(
-              "hidden sm:inline-block",
               isSolid ? "text-gray-900" : "text-white",
             )}
           >
@@ -76,7 +70,7 @@ export function Navigation({
           </span>
         </Link>
 
-        <nav className="hidden flex-1 items-center justify-center gap-8 md:flex">
+        <nav className="hidden absolute left-1/2 -translate-x-1/2 items-center justify-center gap-8 md:flex">
           {NAV_ITEMS.map((item) =>
             item.isExternal ? (
               <a
@@ -158,27 +152,24 @@ export function Navigation({
         </div>
       </div>
 
+      {/* Mobile Dropdown Backdrop */}
+      {isMobileMenuOpen && (
+        <div
+          className="fixed inset-0 z-30 bg-black/20 backdrop-blur-sm md:hidden"
+          onClick={onToggleMobileMenu}
+          aria-label="Lukk meny"
+        />
+      )}
+
+      {/* Mobile Dropdown Menu */}
       <div
         className={cn(
-          "md:hidden",
-          isMobileMenuOpen
-            ? "pointer-events-auto opacity-100"
-            : "pointer-events-none opacity-0",
+          "absolute left-0 right-0 top-full z-40 overflow-hidden bg-white shadow-lg transition-all duration-300 md:hidden",
+          isMobileMenuOpen ? "max-h-[600px] opacity-100" : "max-h-0 opacity-0",
         )}
       >
-        <button
-          type="button"
-          aria-label="Lukk navigasjon"
-          onClick={onToggleMobileMenu}
-          className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm transition-opacity duration-300"
-        />
-        <div
-          className={cn(
-            "fixed inset-y-0 right-0 z-50 flex h-full w-72 max-w-[85vw] flex-col gap-6 bg-white px-6 py-16 text-base font-semibold tracking-tight text-gray-900 shadow-2xl transition-transform duration-500 ease-smooth",
-            isMobileMenuOpen ? "translate-x-0" : "translate-x-full",
-          )}
-        >
-          <nav className="flex flex-col gap-6">
+        <div className="mx-auto max-w-7xl px-6 py-6">
+          <nav className="flex flex-col gap-4">
             {NAV_ITEMS.map((item) =>
               item.isExternal ? (
                 <a
@@ -186,7 +177,7 @@ export function Navigation({
                   href={item.path}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-base font-semibold text-gray-900 transition-colors hover:text-[hsl(var(--primary))]"
+                  className="rounded-lg px-4 py-3 text-base font-semibold text-gray-900 transition-colors hover:bg-gray-50 hover:text-[hsl(var(--primary))]"
                 >
                   {item.name}
                 </a>
@@ -196,10 +187,10 @@ export function Navigation({
                   href={item.path}
                   onClick={onNavigate}
                   className={cn(
-                    "text-base font-semibold transition-colors",
+                    "rounded-lg px-4 py-3 text-base font-semibold transition-colors",
                     activePath === item.path
-                      ? "text-[hsl(var(--primary))]"
-                      : "text-gray-900 hover:text-[hsl(var(--primary))]",
+                      ? "bg-[hsl(var(--accent-10))] text-[hsl(var(--primary))]"
+                      : "text-gray-900 hover:bg-gray-50 hover:text-[hsl(var(--primary))]",
                   )}
                 >
                   {item.name}
@@ -208,19 +199,23 @@ export function Navigation({
             )}
           </nav>
 
-          <div className="mt-auto space-y-6">
+          <div className="mt-4 space-y-4 border-t border-gray-200 pt-4">
+            <div className="flex items-center justify-center">
+              <LanguageSwitch isSolid={true} />
+            </div>
+
             <Button asChild className="w-full rounded-full font-semibold shadow-md">
               <Link href="/kontakt" onClick={onNavigate}>
                 {t.navigation.contactUs}
               </Link>
             </Button>
 
-            <div className="space-y-4 border-t border-gray-200 pt-6">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
               {CONTACT_ITEMS.map((item) => (
                 <a
                   key={item.value}
                   href={item.href}
-                  className="group flex items-center gap-3 text-sm font-medium text-gray-600 transition-colors hover:text-[hsl(var(--primary))]"
+                  className="group flex items-center gap-3 rounded-lg bg-gray-50 px-4 py-3 text-sm font-medium text-gray-600 transition-all hover:bg-[hsl(var(--accent-10))] hover:text-[hsl(var(--primary))]"
                   aria-label={`${item.label} ${item.value}`}
                 >
                   <item.icon className="h-5 w-5 transition-transform duration-300 group-hover:scale-110" />
