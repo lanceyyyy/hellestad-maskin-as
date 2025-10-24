@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(awk:*)",
+      "Bash(npm install:*)",
+      "Bash(if not exist .env.local copy .env.local.example .env.local)",
+      "Bash(test:*)",
+      "Bash(dir \"C:\\Startup\\hellestad-maskin-as\\src\\app\\(site)\\kjop\\[id]\" /b)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -1,0 +1,27 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" rx="32" fill="#0F172A"/>
+  <rect x="40" y="40" width="1120" height="550" rx="28" fill="#101926"/>
+  <rect x="40" y="40" width="1120" height="550" rx="28" fill="url(#gradientOverlay)" opacity="0.4"/>
+  <g opacity="0.25">
+    <circle cx="320" cy="210" r="140" fill="#EA7A21"/>
+    <circle cx="880" cy="420" r="180" fill="#EA7A21"/>
+  </g>
+  <text x="120" y="260" fill="white" font-family="Manrope, 'Segoe UI', sans-serif" font-size="26" letter-spacing="12" textLength="550">HELLESTAD MASKIN AS</text>
+  <text x="120" y="340" fill="white" font-family="Manrope, 'Segoe UI', sans-serif" font-size="72" font-weight="700">
+    Maskinentreprenør
+  </text>
+  <text x="120" y="410" fill="white" font-family="Manrope, 'Segoe UI', sans-serif" font-size="44" font-weight="500">
+    Kjøp og salg av dokumenterte anleggsmaskiner
+  </text>
+  <text x="120" y="470" fill="#D1D5DB" font-family="Manrope, 'Segoe UI', sans-serif" font-size="24">
+    Prosjektpartner for grunnarbeid, logistikk og maskinpark
+  </text>
+  <path d="M820 200 L980 200 L1090 310" stroke="rgba(234,122,33,0.45)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M820 320 L940 320 L1050 430" stroke="rgba(104,197,230,0.4)" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <defs>
+    <linearGradient id="gradientOverlay" x1="1200" y1="630" x2="0" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#162235"/>
+    </linearGradient>
+  </defs>
+</svg>
